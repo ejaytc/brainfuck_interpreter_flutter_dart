@@ -1,0 +1,79 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# --- Web Specific ---
+# If you use the web target, ignore these generated files
+web/index.html.json
+web/main.dart.js*
+
+# --- Desktop Specific ---
+# Windows/Linux/macOS build artifacts
+bin/
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+macos/Flutter/ephemeral/
+*.exe
+*.app
+*.so
+*.dll
+
+# --- IDE Specific ---
+# VS Code
+.vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
+
+/android/local.properties
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+
+# --- Operating System ---
+Thumbs.db
+
+# --- Brainfuck Data (Optional) ---
+# If you save log files or .bf scripts you don't want to share
+# bf_temp_output.txt
+
