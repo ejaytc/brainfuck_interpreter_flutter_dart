@@ -44,6 +44,24 @@ class BfTerminalScreen extends StatefulWidget {
 class _BfTerminalScreenState extends State<BfTerminalScreen> {
   final ScrollController _mainScrollController = ScrollController();
   final List<String> _history = [];
+  final String brainfuckHelp = '''
+    --- TERMINAL COMMANDS ----
+    clear: remove history
+    help: display terminal help
+    --- BRAINFUCK COMMANDS ---
+     >  : Move pointer right
+     <  : Move pointer left
+     +  : Increment cell value
+     -  : Decrement cell value
+     .  : Output ASCII character
+     ,  : Input ASCII character
+     [  : Jump past ] if cell is 0
+     ]  : Jump back to [ if cell is not 0
+    ---------------------------
+    Commands are executed in order. 
+    Any other characters are ignored.
+  ''';
+
 
   BfCore? _bfCore;
 
@@ -85,6 +103,13 @@ class _BfTerminalScreenState extends State<BfTerminalScreen> {
   }
 
   void _handleUserCommand(String userInput) async{
+    if (userInput == 'help') {
+      _handleBfOutput(brainfuckHelp);
+    }
+    else if (userInput == 'clear') {
+      _history.clear();
+    }
+
     if (_bfCore != null && _bfCore!.isWaitingForInput) {
       int byte = userInput.isNotEmpty ? userInput.codeUnitAt(0) : 0;
       _bfCore!.provideInput(byte);
@@ -100,7 +125,6 @@ class _BfTerminalScreenState extends State<BfTerminalScreen> {
     }
     catch (e) {
       setState(() => _history.add("[Error]: ${e.toString()}"));
-      print("${e.toString()}");
     }
   }
 
@@ -123,26 +147,30 @@ class _BfTerminalScreenState extends State<BfTerminalScreen> {
         child: Focus( // Focus is required to capture keyboard events
             autofocus: true,
             child:Scaffold(
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(title: const Text('Brainfuck Interpreter')),
               backgroundColor: Colors.black,
               body: SafeArea(
-                  child: Scrollbar(
-                      controller: _mainScrollController,
-                      child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // The output area becomes scrollable and takes all remaining space
+                    Expanded(
+                      child: Scrollbar(
+                        controller: _mainScrollController,
+                        child: SingleChildScrollView(
                           controller: _mainScrollController,
                           padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              DisplayOutput(
-                                  history: _history,
-                                  // scrollController: _mainScrollController,
-                              ),
-                              const Divider(color: Colors.white24),
-                              TerminalInput(onExecute: _handleUserCommand)
-                            ],
-                          )
-                      )
-                  )
+                          child: DisplayOutput(history: _history),
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Colors.white24, height: 1),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      child: TerminalInput(onExecute: _handleUserCommand),
+                    ),
+                  ],
+                ),
               ),
             ),
         )

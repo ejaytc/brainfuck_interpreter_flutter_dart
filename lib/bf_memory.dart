@@ -10,20 +10,18 @@ extension type Memory(({List<int> memoryBlock, List<int> stack}) data){
   int getMemoryBlock(int memoryPointer) =>
       data.memoryBlock[memoryPointer % pointerLimit];
 
-  void addValue(int memoryPointer, int value) {
-    int index = memoryPointer % pointerLimit;
-    // Perform addition, then force 8-bit wrapping
-    data.memoryBlock[index] = (data.memoryBlock[index] + value) & 0xFF;
+  void addValue(int pointer, int value) {
+    int index = ((pointer % pointerLimit) + pointerLimit) % pointerLimit;
+    data.memoryBlock[index] =
+    (data.memoryBlock[index] + value) & 0xFF;
   }
-      // data.memoryBlock[memoryPointer % pointerLimit] += value & 0xFF;
 
   void subtractValue(int pointer, int value) {
-    int index = pointer % pointerLimit;
-    // Perform subtraction, then force 8-bit wrapping
-    // In Dart, (-1 & 0xFF) correctly results in 255
-    data.memoryBlock[index] = (data.memoryBlock[index] - value) & 0xFF;
+    int index = ((pointer % pointerLimit) + pointerLimit) % pointerLimit;
+    data.memoryBlock[index] =
+    (data.memoryBlock[index] - value) & 0xFF;
   }
-      // data.memoryBlock[pointer % pointerLimit] -= value & 0xFF;
+
 
   void addInput(int pointer, int value){
     data.memoryBlock[pointer % pointerLimit] = value & 0xFF;

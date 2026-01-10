@@ -41,7 +41,7 @@ class BfCore {
   Future<void> execute() async {
     Map<int, int> jumps = _jumpTable(programSource);
     int stepCount = 0;
-    int maxSteps = 1000000;
+    // int maxSteps = 1000000;
 
     while (instructionPointer < programSource.length) {
       stepCount++;

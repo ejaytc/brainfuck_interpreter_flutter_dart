@@ -30,40 +30,10 @@ class _TerminalInputState extends State<TerminalInput> {
   final FocusNode _terminalFocusNode = FocusNode();
 
   @override
-  void initState() {
-    super.initState();
-    // _startListening(widget.outputStream);
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
     _terminalFocusNode.dispose();
     super.dispose();
-  }
-
-  Future<void> _typeText(String newText) async {
-    int i = 0;
-    // _controller.clear();
-
-    while (i < newText.length) {
-      if (!mounted) return;
-
-      setState(() {
-        _controller.text += newText[i];
-        _controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length),
-        );
-      });
-      i++;
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-    final finishedText = _controller.text;
-    if (finishedText.isNotEmpty) {
-      widget.onExecute(finishedText);
-      _controller.clear();
-    }
-    _terminalFocusNode.requestFocus();
   }
 
   @override
@@ -80,18 +50,13 @@ class _TerminalInputState extends State<TerminalInput> {
         prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
         prefixIcon: Padding(
           padding: EdgeInsets.all(2.0),
-          child: Text('\$', style: terminalStyle),
+          child: Text('>', style: terminalStyle),
         ),
       ),
       onSubmitted: (value) {
-        if (value.toLowerCase() == 'help') {
-          widget.onExecute(value);
-          _typeText("Available commands: list, clear, exit...");
-        } else {
-          widget.onExecute(value);
-          _controller.clear();
-          _terminalFocusNode.requestFocus();
-        }
+        widget.onExecute(value);
+        _controller.clear();
+        _terminalFocusNode.requestFocus();
       },
     );
   }
@@ -120,7 +85,7 @@ class _TerminalOutputState extends State<DisplayOutput> {
         width: double.infinity,
         padding: const EdgeInsets.all(2.0),
         child: Text(
-          '\$: $text',
+          '> $text',
           textAlign: TextAlign.left,
           style: terminalStyle,
         ),
